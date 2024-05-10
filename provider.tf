@@ -6,6 +6,13 @@ terraform {
     }
   }
   required_version = "~> 1.8.1"
+  cloud {
+    organization = "ramaseeds"
+
+    workspaces {
+      name = "vcsftf-cli"
+    }
+  }
 }
 
 # # Provider block
