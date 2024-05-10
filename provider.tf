@@ -5,7 +5,7 @@ terraform {
       version = "5.47.0"
     }
   }
-  required_version = "~> 1.8.1"
+  required_version = "~> 1.8.3"
   cloud {
     organization = "ramaseeds"
 
