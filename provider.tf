@@ -8,8 +8,8 @@ terraform {
   required_version = "~> 1.8.1"
 }
 
-# Provider block
-provider "aws" {
-  region  = "us-east-2"
-  profile = "default"
-}
+# # Provider block
+# provider "aws" {
+#   region  = "us-east-2"
+#   profile = "default"
+# }
