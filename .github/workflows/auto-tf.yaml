@@ -1,0 +1,54 @@
+name: "Simple terraform workflow"
+on:
+  push:
+    branches:
+      -  main
+
+    inputs:
+      TFACTION:
+        description: "Terraform Action"
+        default: "apply"
+        required: true
+        type: choice
+        options:
+         - "apply"
+         - "destroy"
+      
+permissions:
+  contents: 'read'
+  id-token: 'write'
+jobs:
+  vpc-create:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.8.3
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Terraform Init
+        run: terraform  init
+
+    # Generates an execution plan for Terraform
+      - name: Terraform Plan
+        run: terraform  plan -input=false
+
+      - name: Terraform Apply
+        env:
+          TF_VAR_VMCOUNT: "${{ inputs.VMCOUNT }}"
+          TF_VAR_PUBLIC: ${{ inputs.PUBLIC }}
+          TF_VAR_location: ${{ inputs.location }}
+          TF_VAR_rgname: ${{ inputs.rgname }}
+        # if: ${{ github.event.inputs.TFACTION == 'apply' }}
+        run: terraform  apply --auto-approve -input=false
+
+      - name: Terraform Destroy
+        # if: ${{ github.event.inputs.TFACTION == 'destroy' }}
+        run: terraform destroy --auto-approve -input=false
