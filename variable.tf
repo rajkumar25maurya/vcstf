@@ -1,4 +1,0 @@
-variable "a" {
-  type = string
-
-}
